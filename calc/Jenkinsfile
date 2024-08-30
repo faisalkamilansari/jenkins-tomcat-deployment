@@ -1,0 +1,94 @@
+pipeline {
+    agent any
+
+    environment {
+        // Define environment variables for Maven, SonarQube, and Artifactory
+        MAVEN_HOME = tool name: 'Maven 3.8.1', type: 'Maven'
+        SONARQUBE_SERVER = 'SonarQube'  // Replace with your SonarQube server ID
+        ARTIFACTORY_SERVER = 'Artifactory'  // Replace with your Artifactory server ID
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout code from the repository
+                git url: 'https://github.com/faisalkamilansari/jenkins-tomcat-deployment.git', branch: 'main'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Compile and package the application using Maven
+                sh "${MAVEN_HOME}/bin/mvn clean install"
+            }
+        }
+        stage('SonarQube Analysis'){
+            steps
+                {
+                    def mvn = tool 'Default Maven';
+                    withSonarQubeEnv() {
+                    sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=Jenkins-tomcat-deployment"
+                    }
+                }
+        }
+        stage('Code Analysis') {
+            steps {
+                // Run SonarQube analysis
+                withSonarQubeEnv(SONARQUBE_SERVER) {
+                    sh "${MAVEN_HOME}/bin/mvn sonar:sonar"
+                }
+            }
+        }
+
+        stage('Upload to Artifactory') {
+            steps {
+                // Upload the packaged application to Artifactory
+                script {
+                    def server = Artifactory.server(ARTIFACTORY_SERVER)
+                    def uploadSpec = """{
+                        "files": [{
+                            "pattern": "target/*.war",
+                            "target": "libs-release-local/${env.JOB_NAME}/${env.BUILD_NUMBER}/"
+                        }]
+                    }"""
+                    server.upload(uploadSpec)
+                }
+            }
+        }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                // Deploy to the appropriate Tomcat environment based on the input parameter
+                script {
+                    def deployEnv = input message: 'Choose deployment environment:', parameters: [choice(name: 'Environment', choices: ['dev', 'prod'], description: 'Select the environment to deploy')]
+
+                    // Define the Tomcat server details for each environment
+                    def tomcatServer = deployEnv == 'dev' ? 'http://dev-tomcat-server:8080/manager' : 'http://prod-tomcat-server:8080/manager'
+                    def tomcatUser = deployEnv == 'dev' ? 'dev-user' : 'prod-user'
+                    def tomcatPassword = deployEnv == 'dev' ? 'dev-password' : 'prod-password'
+                    def warFile = "target/myapp-${env.BUILD_NUMBER}.war"
+
+                    // Deploy to Tomcat
+                    sh """
+                        curl --upload-file ${warFile} --user ${tomcatUser}:${tomcatPassword} ${tomcatServer}/text/deploy?path=/myapp&update=true
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up workspace after the build
+            cleanWs()
+        }
+        success {
+            // Notify on successful build and deployment
+            echo 'Deployment completed successfully!'
+        }
+        failure {
+            // Notify on failure
+            echo 'Deployment failed!'
+        }
+    }
+}
