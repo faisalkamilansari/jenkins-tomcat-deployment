@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Define environment variables for Maven, SonarQube, and Artifactory
         MAVEN_HOME = tool name: 'Maven 3.8.1', type: 'Maven'
-        SONARQUBE_SERVER = 'SonarQube'  // Replace with your SonarQube server ID
+        SONARQUBE_SERVER = 'SonarQube-Server'  // Replace with your SonarQube server ID
         ARTIFACTORY_SERVER = 'Artifactory'  // Replace with your Artifactory server ID
     }
 
