@@ -69,8 +69,4 @@ This repository contains a Jenkins pipeline configuration for building, analyzin
 - Verify Maven and SonarQube installations and configurations on the Jenkins agent.
 - Check Tomcat server logs for deployment issues.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ---
