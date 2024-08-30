@@ -60,7 +60,7 @@ pipeline {
                 // Deploy to the appropriate Tomcat environment based on the input parameter
                     script {
 
-                        echo 'dir'
+                        echo 'pwd()'
                         // def tomcatDir = "C:\\Program Files (x86)\\Apache Software Foundation\\Tomcat 9.0\\webapps"
                         // def warFile = "target\\web-calculator.war"
                         // def oldWarFile = "${tomcatDir}\\web-calculator.war"
