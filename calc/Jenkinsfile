@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define environment variables for Maven, SonarQube, and Artifactory
-        MAVEN_HOME = tool name: 'Maven 3.8.1', type: 'Maven'
+        // MAVEN_HOME = tool name: 'Maven 3.8.1', type: 'Maven'
         SONARQUBE_SERVER = 'SonarQube-Server'  // Replace with your SonarQube server ID
         ARTIFACTORY_SERVER = 'Artifactory'  // Replace with your Artifactory server ID
     }
@@ -19,7 +19,8 @@ pipeline {
         stage('Build') {
             steps {
                 // Compile and package the application using Maven
-                sh "${MAVEN_HOME}/bin/mvn clean install"
+                bat "mvn -v"
+                bat "${MAVEN_HOME}/bin/mvn clean install"
             }
         }
         // stage('SonarQube Analysis'){
