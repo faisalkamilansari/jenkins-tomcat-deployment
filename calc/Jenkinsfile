@@ -58,20 +58,16 @@ pipeline {
         stage('Deploy to Tomcat') {
             steps {
                 // Deploy to the appropriate Tomcat environment based on the input parameter
-                script {
-                    def deployEnv = input message: 'Choose deployment environment:', parameters: [choice(name: 'Environment', choices: ['dev', 'prod'], description: 'Select the environment to deploy')]
+                    script {
+                        def tomcatDir = 'C:\\Program Files (x86)\\Apache Software Foundation\\Tomcat 9.0\\webapps'
+                        def warFile = "target\\myapp-${env.BUILD_NUMBER}.war"
+                        def oldWarFile = "${tomcatDir}\\myapp.war"
 
-                    // Define the Tomcat server details for each environment
-                    def tomcatServer = deployEnv == 'dev' ? 'http://dev-tomcat-server:8080/manager' : 'http://prod-tomcat-server:8080/manager'
-                    def tomcatUser = deployEnv == 'dev' ? 'dev-user' : 'prod-user'
-                    def tomcatPassword = deployEnv == 'dev' ? 'dev-password' : 'prod-password'
-                    def warFile = "target/myapp-${env.BUILD_NUMBER}.war"
-
-                    // Deploy to Tomcat
-                    bat """
-                        curl --upload-file ${warFile} --user ${tomcatUser}:${tomcatPassword} ${tomcatServer}/text/deploy?path=/myapp&update=true
-                    """
-                }
+                        bat """
+                            if exist ${oldWarFile} del ${oldWarFile}
+                            copy ${warFile} ${oldWarFile}
+                        """
+                        }
             }
         }
     }
