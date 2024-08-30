@@ -20,7 +20,7 @@ pipeline {
             steps {
                 // Compile and package the application using Maven
                 bat "mvn -v"
-                bat "mvn clean install"
+                bat "cd calc && mvn clean install"
             }
         }
         // stage('SonarQube Analysis'){
