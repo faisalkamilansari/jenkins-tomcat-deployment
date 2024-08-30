@@ -39,21 +39,21 @@ pipeline {
         //     }
         // }
 
-        stage('Upload to Artifactory') {
-            steps {
-                // Upload the packaged application to Artifactory
-                script {
-                    def server = Artifactory.server(ARTIFACTORY_SERVER)
-                    def uploadSpec = """{
-                        "files": [{
-                            "pattern": "target/*.war",
-                            "target": "libs-release-local/${env.JOB_NAME}/${env.BUILD_NUMBER}/"
-                        }]
-                    }"""
-                    server.upload(uploadSpec)
-                }
-            }
-        }
+        // stage('Upload to Artifactory') {
+        //     steps {
+        //         // Upload the packaged application to Artifactory
+        //         script {
+        //             def server = Artifactory.server(ARTIFACTORY_SERVER)
+        //             def uploadSpec = """{
+        //                 "files": [{
+        //                     "pattern": "target/*.war",
+        //                     "target": "libs-release-local/${env.JOB_NAME}/${env.BUILD_NUMBER}/"
+        //                 }]
+        //             }"""
+        //             server.upload(uploadSpec)
+        //         }
+        //     }
+        // }
 
         stage('Deploy to Tomcat') {
             steps {
@@ -68,7 +68,7 @@ pipeline {
                     def warFile = "target/myapp-${env.BUILD_NUMBER}.war"
 
                     // Deploy to Tomcat
-                    sh """
+                    bat """
                         curl --upload-file ${warFile} --user ${tomcatUser}:${tomcatPassword} ${tomcatServer}/text/deploy?path=/myapp&update=true
                     """
                 }
