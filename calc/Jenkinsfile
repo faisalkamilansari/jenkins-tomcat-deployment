@@ -52,13 +52,14 @@ pipeline {
         //             }"""
         //             server.upload(uploadSpec)
         //         }
-        //     }
+        //Tomcat9     }
         // }
 
         stage('Deploy to Tomcat') {
             steps {
                 // Deploy to the appropriate Tomcat environment based on the input parameter
                     script {
+                        def tomcatServiceName = 'Tomcat9'
                         def tomcatDir = 'C:\\Program Files (x86)\\Apache Software Foundation\\Tomcat 9.0\\webapps'
                         def warFile = "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Jenkins-tomcat-deployment\\calc\\target\\web-calculator.war"
                         def destFile = "${tomcatDir}\\web-calculator.war"
@@ -66,6 +67,15 @@ pipeline {
                         bat """
                             if exist "${destFile}" del /q "${destFile}"
                             copy "${warFile}" "${destFile}"
+                            
+                            echo Stopping Tomcat service...
+                                net stop ${tomcatServiceName}
+
+                                echo Waiting for Tomcat to stop...
+                                timeout /t 20 /nobreak
+
+                                echo Starting Tomcat service...
+                                net start ${tomcatServiceName}
                         """
                     }
             }
