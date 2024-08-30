@@ -25,7 +25,7 @@ pipeline {
         stage('SonarQube Analysis'){
             steps
                 {
-                    withSonarQubeEnv() {
+                    withSonarQubeEnv(SONARQUBE_SERVER) {
                     bat "mvn clean verify sonar:sonar -Dsonar.projectKey=Jenkins-tomcat-deployment"
                     }
                 }
