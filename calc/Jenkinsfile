@@ -62,8 +62,8 @@ pipeline {
                         def tomcatDir = '"C:\\Program Files (x86)\\Apache Software Foundation\\Tomcat 9.0\\webapps\\web-calculator"'
                         def warFile = "target\\web-calculator.war"
                         def oldWarFile = "${tomcatDir}"
-                        bat ''' cd "C:\\Program Files (x86)\\Apache Software Foundation\\Tomcat 9.0\\webapps"
-                        echo "Successfully inside tomcat webapps" '''
+                        bat ''' if exist ${oldWarFile} del ${oldWarFile}
+                             copy ${warFile} ${oldWarFile}'''
 
                         // bat """
                         //     if exist ${oldWarFile} del ${oldWarFile}
