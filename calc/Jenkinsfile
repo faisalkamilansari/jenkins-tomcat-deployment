@@ -69,7 +69,7 @@ pipeline {
                             if exist "${destFile}" del /q "${destFile}"
 
                             echo Copying new WAR file to Tomcat webapps directory...
-                            copy /Y "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Jenkins-tomcat-deployment\\calc\\target\\web-calculator.war" "${destFile}"
+                            copy "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Jenkins-tomcat-deployment\\calc\\target\\web-calculator.war" "${destFile}"
                         """
                     }
             }
