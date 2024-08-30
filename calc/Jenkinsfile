@@ -64,6 +64,7 @@ pipeline {
                         def destFile = "${tomcatDir}\\web-calculator.war"
 
                         bat """
+                            dir
                             echo Deleting old WAR file if it exists...
                             if exist "${destFile}" del /q "${destFile}"
 
