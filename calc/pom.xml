@@ -4,6 +4,7 @@
   <artifactId>calc</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
+  <packaging>sonar-plugin</packaging>
   
   
   <dependencies>
@@ -51,7 +52,7 @@
         <extensions>true</extensions>
         <configuration>
           <!-- the entry-point class that extends org.sonar.api.SonarPlugin -->
-          <pluginClass>com.mycompany.sonar.reference.ExamplePlugin</pluginClass>
+          <pluginClass>com.faisal.sonar.reference.ExamplePlugin</pluginClass>
            
           <!-- advanced properties can be set here. See paragraph "Advanced Build Properties". -->
         </configuration>
