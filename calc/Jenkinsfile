@@ -60,8 +60,8 @@ pipeline {
                 // Deploy to the appropriate Tomcat environment based on the input parameter
                     script {
                         def tomcatDir = '"C:\\Program Files (x86)\\Apache Software Foundation\\Tomcat 9.0\\webapps"'
-                        def warFile = "target\\myapp-${env.BUILD_NUMBER}.war"
-                        def oldWarFile = "${tomcatDir}\\myapp.war"
+                        def warFile = "target\\web-calculator.war"
+                        def oldWarFile = "${tomcatDir}\\web-calculator.war"
 
                         bat """
                             if exist ${oldWarFile} del ${oldWarFile}
