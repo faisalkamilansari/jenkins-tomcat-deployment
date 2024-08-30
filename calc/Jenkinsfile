@@ -20,7 +20,7 @@ pipeline {
             steps {
                 // Compile and package the application using Maven
                 bat "mvn -v"
-                bat "${MAVEN_HOME}/bin/mvn clean install"
+                bat "mvn clean install"
             }
         }
         // stage('SonarQube Analysis'){
@@ -36,7 +36,7 @@ pipeline {
             steps {
                 // Run SonarQube analysis
                 withSonarQubeEnv(SONARQUBE_SERVER) {
-                    sh "${MAVEN_HOME}/bin/mvn sonar:sonar"
+                    bat "mvn sonar:sonar"
                 }
             }
         }
