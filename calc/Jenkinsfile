@@ -19,27 +19,25 @@ pipeline {
         stage('Build') {
             steps {
                 // Compile and package the application using Maven
-                bat "mvn -v"
                 bat "cd calc && mvn clean install"
             }
         }
-        // stage('SonarQube Analysis'){
-        //     steps
-        //         {
-        //             def mvn = tool 'Default Maven';
-        //             withSonarQubeEnv() {
-        //             sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=Jenkins-tomcat-deployment"
-        //             }
-        //         }
-        // }
-        stage('Code Analysis') {
-            steps {
-                // Run SonarQube analysis
-                withSonarQubeEnv(SONARQUBE_SERVER) {
-                    bat "cd calc && mvn sonar:sonar"
+        stage('SonarQube Analysis'){
+            steps
+                {
+                    withSonarQubeEnv() {
+                    bat "mvn clean verify sonar:sonar -Dsonar.projectKey=Jenkins-tomcat-deployment"
+                    }
                 }
-            }
         }
+        // stage('Code Analysis') {
+        //     steps {
+        //         // Run SonarQube analysis
+        //         withSonarQubeEnv(SONARQUBE_SERVER) {
+        //             bat "cd calc && mvn sonar:sonar"
+        //         }
+        //     }
+        // }
 
         stage('Upload to Artifactory') {
             steps {
