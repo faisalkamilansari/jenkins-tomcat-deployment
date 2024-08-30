@@ -69,7 +69,7 @@ pipeline {
                         //     if exist ${oldWarFile} del ${oldWarFile}
                         //     copy ${warFile} ${oldWarFile}
                         // """
-                        // }
+                    }
             }
         }
     }
